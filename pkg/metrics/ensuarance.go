@@ -129,7 +129,7 @@ var (
 			Namespace:      CraneNamespace,
 			Subsystem:      CraneAgentSubsystem,
 			Name:           AnalyzerStatusTotal,
-			Help:           "The times of nep rule triggered/restored.",
+			Help:           "The times of NodeQOS rule triggered/restored.",
 			StabilityLevel: k8smetrics.ALPHA,
 		}, []string{"key", "type"},
 	)
