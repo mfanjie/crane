@@ -119,7 +119,7 @@ var (
 			Namespace:      CraneNamespace,
 			Subsystem:      CraneAgentSubsystem,
 			Name:           AnalyzerStatus,
-			Help:           "Status of anormaly analyzer.",
+			Help:           "Status of anomaly analyzer.",
 			StabilityLevel: k8smetrics.ALPHA,
 		}, []string{"key", "type"},
 	)

@@ -162,15 +162,17 @@ func labelMatch(labelSelector metav1.LabelSelector, matchLabels map[string]strin
 	return true
 }
 
-func match(pod *v1.Pod, sq *ensuranceapi.PodQOS) bool {
+func match(pod *v1.Pod, podQOS *ensuranceapi.PodQOS) bool {
 
-	if sq.Spec.ScopeSelector == nil {
+	if podQOS.Spec.ScopeSelector == nil &&
+		podQOS.Spec.LabelSelector.MatchLabels == nil &&
+		podQOS.Spec.LabelSelector.MatchExpressions == nil {
 		return false
 	}
 
 	// AND of the selectors
 	var nameSpaceSelectors, prioritySelectors, qosClassSelectors []ensuranceapi.ScopedResourceSelectorRequirement
-	for _, ss := range sq.Spec.ScopeSelector.MatchExpressions {
+	for _, ss := range podQOS.Spec.ScopeSelector.MatchExpressions {
 		if ss.ScopeName == ensuranceapi.NamespaceSelectors {
 			nameSpaceSelectors = append(nameSpaceSelectors, ss)
 		}
@@ -186,11 +188,11 @@ func match(pod *v1.Pod, sq *ensuranceapi.PodQOS) bool {
 	for _, nss := range nameSpaceSelectors {
 		match, err := podMatchesNameSpaceSelector(pod, nss)
 		if err != nil {
-			klog.Errorf("Error on matching scope %s: %v", sq.Name, err)
+			klog.Errorf("Error on matching scope %s: %v", podQOS.Name, err)
 			return false
 		}
 		if !match {
-			klog.V(6).Infof("SvcQOS %s namespace selector not match pod %s/%s", sq.Name, pod.Namespace, pod.Name)
+			klog.V(6).Infof("SvcQOS %s namespace selector not match pod %s/%s", podQOS.Name, pod.Namespace, pod.Name)
 			return false
 		}
 	}
@@ -258,11 +260,11 @@ func match(pod *v1.Pod, sq *ensuranceapi.PodQOS) bool {
 	for _, qos := range qosClassSelectors {
 		match, err := podMatchesqosClassSelector(pod, qos)
 		if err != nil {
-			klog.Errorf("Error on matching scope %s: %v", sq.Name, err)
+			klog.Errorf("Error on matching scope %s: %v", podQOS.Name, err)
 			qosClassMatch = false
 		}
 		if !match {
-			klog.V(6).Infof("SvcQOS %s qosclass selector not match pod %s/%s", sq.Name, pod.Namespace, pod.Name)
+			klog.V(6).Infof("SvcQOS %s qosclass selector not match pod %s/%s", podQOS.Name, pod.Namespace, pod.Name)
 			qosClassMatch = false
 		}
 	}
