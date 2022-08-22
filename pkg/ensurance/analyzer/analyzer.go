@@ -287,7 +287,7 @@ func (s *AnomalyAnalyzer) computeActionContext(aboveThreshold bool, key string, 
 			s.restored[key] = uint64(object.RestoreThreshold)
 		}
 		// only do restore action after trigger x times and restore y times
-		if s.triggered[key] == uint64(object.AvoidanceThreshold) &&
+		if s.triggered[key] >= uint64(object.AvoidanceThreshold) &&
 			s.restored[key] >= uint64(object.RestoreThreshold) {
 			// reset trigger count when restored
 			s.triggered[key] = 0

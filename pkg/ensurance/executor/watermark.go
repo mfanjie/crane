@@ -161,13 +161,11 @@ func calculateGaps(stateMap map[string][]common.TimeSeries,
 			if !evictExist {
 				delete(result, m.Name)
 			} else {
-				klog.V(6).Infof("BuildEvictWatermarkGap: For metrics %s, maxUsed is %f, watermark is %f", m, maxUsed, float64(evictWatermark.PopSmallest().Value()))
+				klog.V(6).Infof("BuildEvictWatermarkGap: For metrics %+v, maxUsed is %f, watermark is %f", m, maxUsed, float64(evictWatermark.PopSmallest().Value()))
 				result[m.Name] = (1 + executeExcessPercent) * (maxUsed - float64(evictWatermark.PopSmallest().Value()))
 			}
 		}
-	}
-
-	if throttleExecutor != nil {
+	} else if throttleExecutor != nil {
 		// Traverse ThrottleAbleMetricName but not throttleExecutor.ThrottleDownWatermark can make it easier when users use the wrong metric name in NEP, cause this limit metrics
 		// must come from ThrottleAbleMetrics
 		for _, m := range metricMap {

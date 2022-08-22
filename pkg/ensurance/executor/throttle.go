@@ -86,7 +86,7 @@ func (t *ThrottleExecutor) Avoid(ctx *ExecuteContext) error {
 			errPodKeys = t.throttlePods(ctx, &totalReleased, highestPriorityMetric)
 		}
 	} else {
-		ctx.ToBeThrottleDown = calculateGaps(ctx.stateMap, t, &EvictExecutor{}, ctx.executeExcessPercent)
+		ctx.ToBeThrottleDown = calculateGaps(ctx.stateMap, t, nil, ctx.executeExcessPercent)
 
 		if ctx.ToBeThrottleDown.HasUsageMissedMetric() {
 			klog.V(6).Info("There is a metric usage missed")
@@ -144,7 +144,7 @@ func (t *ThrottleExecutor) Restore(ctx *ExecuteContext) error {
 	metrics.UpdateLastTimeWithSubComponent(string(known.ModuleActionExecutor), string(metrics.SubComponentThrottle), metrics.StepRestore, start)
 	defer metrics.UpdateDurationFromStartWithSubComponent(string(known.ModuleActionExecutor), string(metrics.SubComponentThrottle), metrics.StepRestore, start)
 
-	klog.V(6).Info("ThrottleExecutor restore, %v", *t)
+	klog.V(6).Infof("ThrottleExecutor restore, %v", *t)
 
 	if len(t.ThrottleUpPods) == 0 {
 		metrics.UpdateExecutorStatus(metrics.SubComponentThrottle, metrics.StepRestore, 0)
@@ -177,7 +177,7 @@ func (t *ThrottleExecutor) Restore(ctx *ExecuteContext) error {
 			errPodKeys = t.restorePods(ctx, &totalReleased, highestPrioriyMetric)
 		}
 	} else {
-		ctx.TOBEThrottleUp = calculateGaps(ctx.stateMap, t, &EvictExecutor{}, ctx.executeExcessPercent)
+		ctx.TOBEThrottleUp = calculateGaps(ctx.stateMap, t, nil, ctx.executeExcessPercent)
 
 		if ctx.TOBEThrottleUp.HasUsageMissedMetric() {
 			klog.V(6).Info("There is a metric usage missed")

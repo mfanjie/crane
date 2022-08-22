@@ -72,7 +72,7 @@ func (e *EvictExecutor) Avoid(ctx *ExecuteContext) error {
 			errPodKeys = e.evictPods(ctx, &totalReleased, highestPriorityMetric)
 		}
 	} else {
-		ctx.ToBeEvict = calculateGaps(ctx.stateMap, &ThrottleExecutor{}, e, ctx.executeExcessPercent)
+		ctx.ToBeEvict = calculateGaps(ctx.stateMap, nil, e, ctx.executeExcessPercent)
 
 		if ctx.ToBeEvict.HasUsageMissedMetric() {
 			klog.V(6).Infof("There is a metric usage missed")
@@ -85,7 +85,7 @@ func (e *EvictExecutor) Avoid(ctx *ExecuteContext) error {
 			var released ReleaseResource
 			wg := sync.WaitGroup{}
 			for _, m := range quantified {
-				klog.V(6).Infof("Evict precisely on metric %s", m)
+				klog.V(6).Infof("Evict precisely on metric %s, and current gaps are %+v", m, ctx.ToBeEvict)
 				if metricMap[m].Sortable {
 					metricMap[m].SortFunc(e.EvictPods)
 				} else {
@@ -96,14 +96,13 @@ func (e *EvictExecutor) Avoid(ctx *ExecuteContext) error {
 				for _, pc := range e.EvictPods {
 					klog.V(6).Info(pc.Key.String())
 				}
-
 				for !ctx.ToBeEvict.TargetGapsRemoved(m) {
-					klog.V(6).Infof("For metric %s, there is still gap to watermarks: %f", m, ctx.ToBeEvict[m])
-					if podinfo.HasNoExecutedPod(e.EvictPods) {
-						index := podinfo.GetFirstNoExecutedPod(e.EvictPods)
+					klog.V(2).Infof("For metric %s, there is more gap to watermarks: %f of %s", m, ctx.ToBeEvict[m], m)
+					if podinfo.ContainsPendingPod(e.EvictPods) {
+						index := podinfo.GetFirstPendingPod(e.EvictPods)
 						errKeys, released = metricMap[m].EvictFunc(&wg, ctx, index, &totalReleased, e.EvictPods)
 						errPodKeys = append(errPodKeys, errKeys...)
-						klog.V(6).Infof("Evict pods %s, released %f resource", e.EvictPods[index].Key, released[m])
+						klog.Warningf("Evicted pods %s, released %f of %s", e.EvictPods[index].Key, released[m], m)
 						e.EvictPods[index].Executed = true
 						ctx.ToBeEvict[m] -= released[m]
 					} else {
