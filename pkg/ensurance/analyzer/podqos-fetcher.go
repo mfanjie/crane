@@ -2,6 +2,7 @@ package analyzer
 
 import (
 	"fmt"
+	"reflect"
 	"strconv"
 	"strings"
 
@@ -77,6 +78,20 @@ func match(pod *v1.Pod, podQOS *ensuranceapi.PodQOS) bool {
 		podQOS.Spec.LabelSelector.MatchLabels == nil &&
 		podQOS.Spec.LabelSelector.MatchExpressions == nil {
 		return false
+	}
+
+	if !reflect.DeepEqual(podQOS.Spec.LabelSelector, metav1.LabelSelector{}) {
+		matchLabels := map[string]string{}
+		for k, v := range pod.Labels {
+			matchLabels[k] = v
+		}
+		if !labelMatch(podQOS.Spec.LabelSelector, matchLabels) {
+			return false
+		}
+	}
+
+	if podQOS.Spec.ScopeSelector == nil {
+		return true
 	}
 
 	// AND of the selectors
@@ -183,6 +198,7 @@ func match(pod *v1.Pod, podQOS *ensuranceapi.PodQOS) bool {
 
 	return true
 }
+
 func podMatchesNameSpaceSelector(pod *v1.Pod, selector ensuranceapi.ScopedResourceSelectorRequirement) (bool, error) {
 	labelSelector, err := scopedResourceSelectorRequirementsAsSelector(selector)
 	if err != nil {
