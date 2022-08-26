@@ -91,7 +91,7 @@ func match(pod *v1.Pod, podQOS *ensuranceapi.PodQOS) bool {
 	}
 
 	if podQOS.Spec.ScopeSelector == nil {
-		return false
+		return true
 	}
 
 	// AND of the selectors
