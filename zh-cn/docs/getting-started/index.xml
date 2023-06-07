@@ -1,6 +1,8 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Crane – 开始使用</title><link>/zh-cn/docs/getting-started/</link><description>Recent content in 开始使用 on Crane</description><generator>Hugo -- gohugo.io</generator><atom:link href="/zh-cn/docs/getting-started/index.xml" rel="self" type="application/rss+xml"/><item><title>Docs: 介绍</title><link>/zh-cn/docs/getting-started/introduction/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/zh-cn/docs/getting-started/introduction/</guid><description>
 &lt;h2 id="crane-是什么">Crane 是什么&lt;/h2>
 &lt;p>Crane 是一个基于 FinOps 的云资源分析与成本优化平台。它的愿景是在保证客户应用运行质量的前提下实现极致的降本。&lt;/p>
+&lt;img alt="fcs logo" height="200" src="/images/Crane-FinOps-Certified-Solution.png" title="FinOps Certified Solution" width="200"/>
+&lt;p>Crane 是 &lt;a href="https://www.finops.org/">FinOps 基金会&lt;/a>认证的&lt;a href="https://www.finops.org/members/finops-certified-solution/">云优化方案&lt;/a>。&lt;/p>
 &lt;p>&lt;strong>如何在 Crane 中开启成本优化之旅？&lt;/strong>&lt;/p>
 &lt;ol>
 &lt;li>&lt;strong>成本展示&lt;/strong>: Kubernetes 资源( Deployments, StatefulSets )的多维度聚合与展示。&lt;/li>
@@ -11,23 +13,25 @@
 scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" width="1000" height="600">&lt;/iframe>
 &lt;p>Crane Dashboard &lt;strong>在线 Demo&lt;/strong>: &lt;a href="http://dashboard.gocrane.io/">http://dashboard.gocrane.io/&lt;/a>&lt;/p>
 &lt;h2 id="main-features">Main Features&lt;/h2>
-&lt;p>&lt;img src="/images/crane-overview.png" alt="Crane Overview&amp;quot;">&lt;/p>
+&lt;p>&lt;img src="/images/crane-overview.png" alt="Crane Overview">&lt;/p>
 &lt;p>&lt;strong>成本可视化和优化评估&lt;/strong>&lt;/p>
 &lt;ul>
 &lt;li>提供一组 Exporter 计算集群云资源的计费和账单数据并存储到你的监控系统，比如 Prometheus。&lt;/li>
 &lt;li>多维度的成本洞察，优化评估。通过 &lt;code>Cloud Provider&lt;/code> 支持多云计费。&lt;/li>
 &lt;/ul>
 &lt;p>&lt;strong>推荐框架&lt;/strong>&lt;/p>
-&lt;p>提供了一个可扩展的推荐框架以支持多种云资源的分析，内置了多种推荐器：资源推荐，副本推荐，闲置资源推荐。&lt;a href="/zh-cn/docs/tutorials/recommendation">了解更多&lt;/a>。&lt;/p>
+&lt;p>提供了一个可扩展的推荐框架以支持多种云资源的分析，内置了多种推荐器：资源推荐，副本推荐，HPA 推荐，闲置资源推荐。&lt;a href="/zh-cn/docs/tutorials/recommendation">了解更多&lt;/a>。&lt;/p>
 &lt;p>&lt;strong>基于预测的水平弹性器&lt;/strong>&lt;/p>
 &lt;p>EffectiveHorizontalPodAutoscaler 支持了预测驱动的弹性。它基于社区 HPA 做底层的弹性控制，支持更丰富的弹性触发策略（预测，观测，周期），让弹性更加高效，并保障了服务的质量。&lt;a href="/zh-cn/docs/tutorials/using-effective-hpa-to-scaling-with-effectiveness">了解更多&lt;/a>。&lt;/p>
 &lt;p>&lt;strong>负载感知的调度器&lt;/strong>&lt;/p>
 &lt;p>动态调度器根据实际的节点利用率构建了一个简单但高效的模型，并过滤掉那些负载高的节点来平衡集群。&lt;a href="/zh-cn/docs/tutorials/scheduling-pods-based-on-actual-node-load">了解更多&lt;/a>。&lt;/p>
+&lt;p>&lt;strong>拓扑感知的调度器&lt;/strong>&lt;/p>
+&lt;p>Crane Scheduler与Crane Agent配合工作，支持更为精细化的资源拓扑感知调度和多种绑核策略，可解决复杂场景下“吵闹的邻居问题&amp;quot;，使得资源得到更合理高效的利用。&lt;a href="/zh-cn/docs/tutorials/node-resource-tpolology-scheduler-plugins.md">了解更多&lt;/a>。&lt;/p>
 &lt;p>&lt;strong>基于 QOS 的混部&lt;/strong>&lt;/p>
 &lt;p>QOS相关能力保证了运行在 Kubernetes 上的 Pod 的稳定性。具有多维指标条件下的干扰检测和主动回避能力，支持精确操作和自定义指标接入；具有预测算法增强的弹性资源超卖能力，复用和限制集群内的空闲资源；具备增强的旁路cpuset管理能力，在绑核的同时提升资源利用效率。&lt;a href="/zh-cn/docs/tutorials/using-qos-ensurance">了解更多&lt;/a>。&lt;/p>
 &lt;h2 id="架构">架构&lt;/h2>
 &lt;p>Crane 的整体架构如下：&lt;/p>
-&lt;p>&lt;img src="/images/crane-arch.png" alt="Crane Arch&amp;quot;">&lt;/p>
+&lt;p>&lt;img src="/images/crane-arch.png" alt="Crane Arch">&lt;/p>
 &lt;p>&lt;strong>Craned&lt;/strong>&lt;/p>
 &lt;p>Craned 是 Crane 的最核心组件，它管理了 CRDs 的生命周期以及API。Craned 通过 &lt;code>Deployment&lt;/code> 方式部署且由两个容器组成：&lt;/p>
 &lt;ul>
@@ -192,6 +196,84 @@ id="tabs-4-1" role="tabpanel" aria-labelled-by="tabs-4-1-tab">&lt;pre tabindex="
 helm install crane -n crane-system --create-namespace crane/crane
 helm install fadvisor -n crane-system --create-namespace crane/fadvisor&lt;/code>&lt;/pre>&lt;/div>
 &lt;/div>
+&lt;p>通过覆盖 Helm/Chart 默认参数可以定制需要安装的组件和配置，例如不安装 Metric-Adapter：&lt;/p>
+&lt;pre tabindex="0">&lt;code>helm install crane -n crane-system --set metricAdapter.enable=false --create-namespace crane/crane
+&lt;/code>&lt;/pre>&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>参数&lt;/th>
+&lt;th>描述&lt;/th>
+&lt;th>默认值&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>&lt;code>craned.containerArgs.prometheus-address&lt;/code>&lt;/td>
+&lt;td>Craned 的 Prometheus 地址&lt;/td>
+&lt;td>&lt;code>http://prometheus-server.crane-system.svc.cluster.local:8080&lt;/code>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>metricAdapter.enable&lt;/code>&lt;/td>
+&lt;td>是否安装 MetricAdapter&lt;/td>
+&lt;td>&lt;code>true&lt;/code>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>metricAdapter.installApiService&lt;/code>&lt;/td>
+&lt;td>是否安装 MetricAdapter 的 ApiService&lt;/td>
+&lt;td>&lt;code>true&lt;/code>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>craneAgent.enable&lt;/code>&lt;/td>
+&lt;td>是否安装 Crane-Agent&lt;/td>
+&lt;td>&lt;code>true&lt;/code>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>craneAgent.containerArgs.feature-gates&lt;/code>&lt;/td>
+&lt;td>Crane-Agent 的 feature-gates&lt;/td>
+&lt;td>&lt;code>NodeResource=false&lt;/code>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>cranedDashboard.enable&lt;/code>&lt;/td>
+&lt;td>是否安装 Crane-Dashboard&lt;/td>
+&lt;td>&lt;code>true&lt;/code>&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;p>完整的 Helm/Chart 参数请参考&lt;a href="https://github.com/gocrane/helm-charts/tree/main/charts/crane">这里&lt;/a>&lt;/p>
+&lt;h3 id="使用外部的-prometheus可选">使用外部的 Prometheus（可选）&lt;/h3>
+&lt;p>通常在生产环境，安装时需要配置外部的 Prometheus，你可以通过以下命令修改 Crane 的 Chart Release 配置或者直接修改 Craned Deployment 的容器 Args。&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-bash" data-lang="bash">&lt;span style="display:flex;">&lt;span>helm upgrade crane -n crane-system --set craned.containerArgs.prometheus-address&lt;span style="color:#f92672">=&lt;/span>http://&lt;span style="color:#f92672">{&lt;/span>prometheus-ip&lt;span style="color:#f92672">}&lt;/span>:&lt;span style="color:#f92672">{&lt;/span>port&lt;span style="color:#f92672">}&lt;/span> --create-namespace crane/crane
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>同时，Crane Dashboard 的成本展示需要部署&lt;a href="https://github.com/kubernetes/kube-state-metrics">kube-state-metrics&lt;/a>（Prometheus Chart 中默认会安装），并且需要在你的 Prometheus 中配置额外的 extraScrapeConfigs，可以参考&lt;a href="https://github.com/gocrane/helm-charts/blob/main/integration/prometheus/override_values.yaml#L56">这里&lt;/a>。&lt;/p>
+&lt;p>最后，Fadvisor 需要配置 recording rules 来实现成本数据的聚合，可以参考&lt;a href="https://github.com/gocrane/helm-charts/blob/main/integration/prometheus/override_values.yaml#L6">这里&lt;/a>配置到你的 Prometheus 中。&lt;/p>
+&lt;h3 id="使用外部的-grafana可选">使用外部的 Grafana（可选）&lt;/h3>
+&lt;p>Crane Dashboard 支持通过 Iframe 内嵌 Grafana 报表展示成本分布。如果希望使用外部的 Grafana 内嵌到 Crane Dashboard，首先需要修改 configmap 中的 nginx 配置。&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-bash" data-lang="bash">&lt;span style="display:flex;">&lt;span>kubectl edit configmap -n crane-system nginx-conf
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>配置 &lt;code>grafana.{{ .Release.Namespace }}.svc.cluster.local&lt;/code> 成外部的 Grafana 服务地址，配置 &lt;code>http://$upstream_grafana:8082&lt;/code> 成外部的 Grafana 服务端口。&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-yaml" data-lang="yaml">&lt;span style="display:flex;">&lt;span> &lt;span style="color:#ae81ff">location /grafana {&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#ae81ff">set $upstream_grafana grafana.{{ .Release.Namespace }}.svc.cluster.local;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#ae81ff">proxy_connect_timeout 180;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#ae81ff">proxy_send_timeout 180;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#ae81ff">proxy_read_timeout 180;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#ae81ff">proxy_pass http://$upstream_grafana:8082;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#ae81ff">proxy_redirect off;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#ae81ff">rewrite /grafana/(.*) /$1 break;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#ae81ff">proxy_http_version 1.1;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#ae81ff">proxy_set_header Host $http_host;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#ae81ff">proxy_set_header Upgrade $http_upgrade;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#ae81ff">proxy_set_header Connection $connection_upgrade;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#ae81ff">proxy_set_header X-Real-IP $remote_addr;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#ae81ff">proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>接下来需要参考&lt;a href="https://github.com/gocrane/helm-charts/blob/main/integration/grafana/override_values.yaml">这里&lt;/a>进行配置，原理是 Grafana 支持前端图表的内嵌，但是需要把对应的权限配置打开。&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-bash" data-lang="bash">&lt;span style="display:flex;">&lt;span>kubectl edit configmap -n monitor grafana
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>确定 Service 和 nginx 配置一致&lt;/li>
+&lt;li>配置 datasources 中的 prometheus 与你的环境一致&lt;/li>
+&lt;li>配置 dashboardProviders&lt;/li>
+&lt;li>配置 dashboards&lt;/li>
+&lt;li>配置 grafana.ini&lt;/li>
+&lt;/ul>
+&lt;p>最后，你需要确保 craned 和 grafana pods 已经重建并重新加载新的配置。&lt;/p>
 &lt;h3 id="安装-crane-scheduler可选">安装 Crane-scheduler（可选）&lt;/h3>
 &lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-console" data-lang="console">&lt;span style="display:flex;">&lt;span>helm install scheduler -n crane-system --create-namespace crane/scheduler
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="验证安装是否成功">验证安装是否成功&lt;/h2>
@@ -339,7 +421,14 @@ kubectl apply -f deploy/metric-adapter&lt;/code>&lt;/pre>&lt;/div>
 &lt;/div>
 &lt;p>如果您想自定义 Crane 里配置 Prometheus 的 HTTP 地址，请参考以下的命令。如果您在集群里已存在一个 Prometheus，请将 Server 地址填于&lt;code>CUSTOMIZE_PROMETHEUS&lt;/code> 。&lt;/p>
 &lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-console" data-lang="console">&lt;span style="display:flex;">&lt;span>export CUSTOMIZE_PROMETHEUS=
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>if [ $CUSTOMIZE_PROMETHEUS ]; then sed -i &amp;#39;&amp;#39; &amp;#34;s/http:\/\/prometheus-server.crane-system.svc.cluster.local:8080/${CUSTOMIZE_PROMETHEUS}/&amp;#34; deploy/craned/deployment.yaml ; fi
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>if [ $CUSTOMIZE_PROMETHEUS ]; then sed -i &amp;#39;&amp;#39; &amp;#34;s/PROMETHEUS_ADDRESS/${CUSTOMIZE_PROMETHEUS}/&amp;#34; deploy/craned/deployment.yaml ; fi
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>
+&lt;div class="alert alert-info" role="alert">
+成本展示和资源推荐功能可以运行在较低版本的 Kubernetes 集群中，如果您的 Kubernetes 集群版本接近 1.13，可以尝试使用 deploy/manifest_1.13 的 crd 定义进行自定义安装
+&lt;/div>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-console" data-lang="console">&lt;span style="display:flex;">&lt;span>kubectl apply -f deploy/manifests_1.13
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>kubectl apply -f deploy/craned
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>kubectl apply -f deploy/metric-adapter
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="安装常见问题">安装常见问题&lt;/h2>
 &lt;h3 id="安装-crane-报错">安装 Crane 报错&lt;/h3>
 &lt;p>当您执行 &lt;code>helm install crane -n crane-system --create-namespace crane/crane&lt;/code> 命令时，可能会遇到如下错误：&lt;/p>

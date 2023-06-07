@@ -1,5 +1,7 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Crane – Getting Started</title><link>/docs/getting-started/</link><description>Recent content in Getting Started on Crane</description><generator>Hugo -- gohugo.io</generator><atom:link href="/docs/getting-started/index.xml" rel="self" type="application/rss+xml"/><item><title>Docs: Introduction</title><link>/docs/getting-started/introduction/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/docs/getting-started/introduction/</guid><description>
 &lt;p>Crane is a FinOps Platform for Cloud Resource Analytics and Economics in Kubernetes clusters. The goal is not only help user to manage cloud cost easier but also ensure the quality of applications.&lt;/p>
+&lt;img alt="fcs logo" height="200" src="/images/Crane-FinOps-Certified-Solution.png" title="FinOps Certified Solution" width="200"/>
+&lt;p>Crane is a &lt;a href="https://www.finops.org/members/finops-certified-solution/">FinOps Certified Solution&lt;/a> project of the &lt;a href="https://www.finops.org/">FinOps Foundation&lt;/a>.&lt;/p>
 &lt;p>&lt;strong>How to start a Cost-Saving journey on Crane?&lt;/strong>&lt;/p>
 &lt;ol>
 &lt;li>&lt;strong>Understanding&lt;/strong>: Cost insight for cloud assets and kubernetes resources(Deployments, StatefulSets).&lt;/li>
@@ -17,7 +19,7 @@ scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="tru
 &lt;li>Multi-dimensional cost insight, optimization evaluates are supported. Support Multi-cloud Pricing through &lt;code>Cloud Provider&lt;/code>。&lt;/li>
 &lt;/ul>
 &lt;p>&lt;strong>Recommendation Framework&lt;/strong>&lt;/p>
-&lt;p>Provide a pluggable framework for analytics and give recommendation for cloud resources, support out-of-box recommenders: Workload Resources/Replicas, Idle Resources. &lt;a href="/docs/tutorials/recommendation">learn more&lt;/a>.&lt;/p>
+&lt;p>Provide a pluggable framework for analytics and give recommendation for cloud resources, support out-of-box recommenders: Workload Resources/Replicas/HPA, Idle Resources. &lt;a href="/docs/tutorials/recommendation">learn more&lt;/a>.&lt;/p>
 &lt;p>&lt;strong>Prediction-driven Horizontal Autoscaling&lt;/strong>&lt;/p>
 &lt;p>EffectiveHorizontalPodAutoscaler supports prediction-driven autoscaling. With this capability, user can forecast the incoming peak flow and scale up their application ahead, also user can know when the peak flow will end and scale down their application gracefully. &lt;a href="/docs/tutorials/using-effective-hpa-to-scaling-with-effectiveness">learn more&lt;/a>.&lt;/p>
 &lt;p>&lt;strong>Load-Aware Scheduling&lt;/strong>&lt;/p>
@@ -182,6 +184,84 @@ id="tabs-4-1" role="tabpanel" aria-labelled-by="tabs-4-1-tab">&lt;pre tabindex="
 helm install crane -n crane-system --create-namespace crane/crane
 helm install fadvisor -n crane-system --create-namespace crane/fadvisor&lt;/code>&lt;/pre>&lt;/div>
 &lt;/div>
+&lt;p>Customize the installation by overriding the Helm/Chart default parameters, for example:&lt;/p>
+&lt;pre tabindex="0">&lt;code>helm install crane -n crane-system --set metricAdapter.enable=false --create-namespace crane/crane
+&lt;/code>&lt;/pre>&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>Parameters&lt;/th>
+&lt;th>Description&lt;/th>
+&lt;th>Default&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>&lt;code>craned.containerArgs.prometheus-address&lt;/code>&lt;/td>
+&lt;td>Craned Prometheus Address&lt;/td>
+&lt;td>&lt;code>http://prometheus-server.crane-system.svc.cluster.local:8080&lt;/code>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>metricAdapter.enable&lt;/code>&lt;/td>
+&lt;td>Whether to install MetricAdapter&lt;/td>
+&lt;td>&lt;code>true&lt;/code>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>metricAdapter.installApiService&lt;/code>&lt;/td>
+&lt;td>Whether to install MetricAdapter ApiService&lt;/td>
+&lt;td>&lt;code>true&lt;/code>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>craneAgent.enable&lt;/code>&lt;/td>
+&lt;td>Whether to install Crane-Agent&lt;/td>
+&lt;td>&lt;code>true&lt;/code>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>craneAgent.containerArgs.feature-gates&lt;/code>&lt;/td>
+&lt;td>Crane-Agent feature-gates&lt;/td>
+&lt;td>&lt;code>NodeResource=false&lt;/code>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>cranedDashboard.enable&lt;/code>&lt;/td>
+&lt;td>Whether to install Crane-Dashboard&lt;/td>
+&lt;td>&lt;code>true&lt;/code>&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;p>For complete Helm/Chart parameters please refer to &lt;a href="https://github.com/gocrane/helm-charts/tree/main/charts/crane">here&lt;/a>&lt;/p>
+&lt;h3 id="using-existing-prometheusoptional">Using Existing Prometheus（Optional）&lt;/h3>
+&lt;p>Normally in a production environment offen already have a specified Prometheus. You can modify the Crane Chart Release configuration by using the following command or modify the Craned Deployment container Args directly.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-bash" data-lang="bash">&lt;span style="display:flex;">&lt;span>helm upgrade crane -n crane-system --set craned.containerArgs.prometheus-address&lt;span style="color:#f92672">=&lt;/span>http://&lt;span style="color:#f92672">{&lt;/span>prometheus-ip&lt;span style="color:#f92672">}&lt;/span>:&lt;span style="color:#f92672">{&lt;/span>port&lt;span style="color:#f92672">}&lt;/span> --create-namespace crane/crane
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>At the same time, the cost analytics of the Crane Dashboard need to deploy &lt;a href="https://github.com/kubernetes/kube-state-metrics">kube-state-metrics&lt;/a> (Prometheus Chart Will install it by default), also you need to config additional extraScrapeConfigs in your Prometheus, You can refer to &lt;a href="https://github.com/gocrane/helm-charts/blob/main/integration/prometheus/override_values.yaml#L56">here&lt;/a>.&lt;/p>
+&lt;p>Finally, fadvisor needs to configure recording rules to aggregate cost data, You can refer to &lt;a href="https://github.com/gocrane/helm-charts/blob/main/integration/prometheus/override_values.yaml#L6">here&lt;/a> to configuration in your Prometheus.&lt;/p>
+&lt;h3 id="using-existing-grafanaoptional">Using Existing Grafana（Optional）&lt;/h3>
+&lt;p>The Crane Dashboard supports the Grafana report embedded with the Iframe to show the cost distribution. If you want to use an external Grafana to embed into the Crane Dashboard, you need to modify the nginx configuration in the configmap at first.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-bash" data-lang="bash">&lt;span style="display:flex;">&lt;span>kubectl edit configmap -n crane-system nginx-conf
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Change &lt;code>grafana.{{ .Release.Namespace }}.svc.cluster.local&lt;/code> to be existing Grafana server address，Change &lt;code>http://$upstream_grafana:8082&lt;/code> to be the existing Grafana server port。&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-yaml" data-lang="yaml">&lt;span style="display:flex;">&lt;span> &lt;span style="color:#ae81ff">location /grafana {&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#ae81ff">set $upstream_grafana grafana.{{ .Release.Namespace }}.svc.cluster.local;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#ae81ff">proxy_connect_timeout 180;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#ae81ff">proxy_send_timeout 180;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#ae81ff">proxy_read_timeout 180;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#ae81ff">proxy_pass http://$upstream_grafana:8082;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#ae81ff">proxy_redirect off;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#ae81ff">rewrite /grafana/(.*) /$1 break;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#ae81ff">proxy_http_version 1.1;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#ae81ff">proxy_set_header Host $http_host;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#ae81ff">proxy_set_header Upgrade $http_upgrade;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#ae81ff">proxy_set_header Connection $connection_upgrade;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#ae81ff">proxy_set_header X-Real-IP $remote_addr;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#ae81ff">proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Next up you need to config your grafana based on &lt;a href="https://github.com/gocrane/helm-charts/blob/main/integration/grafana/override_values.yaml">here&lt;/a>, The idea was that Grafana supported embedding panels, but required that the corresponding permission configuration be turned on.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-bash" data-lang="bash">&lt;span style="display:flex;">&lt;span>kubectl edit configmap -n monitor grafana
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
+&lt;li>Make sure Service configuration is the same as nginx&lt;/li>
+&lt;li>Config datasources to be your prometheus address&lt;/li>
+&lt;li>Config dashboardProviders&lt;/li>
+&lt;li>Config dashboards&lt;/li>
+&lt;li>Config grafana.ini&lt;/li>
+&lt;/ul>
+&lt;p>Finally, you should make sure your craned pods and grafana pods are restarted to reload configurations.&lt;/p>
 &lt;h3 id="deploying-crane-scheduleroptional">Deploying Crane-scheduler(optional)&lt;/h3>
 &lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-bash" data-lang="bash">&lt;span style="display:flex;">&lt;span>helm install scheduler -n crane-system --create-namespace crane/scheduler
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="verify-installation">Verify Installation&lt;/h3>
@@ -233,7 +313,7 @@ kubectl apply -f deploy/metric-adapter&lt;/code>&lt;/pre>&lt;/div>
 &lt;/div>
 &lt;p>The following command will configure prometheus http address for crane if you want to customize it. Specify &lt;code>CUSTOMIZE_PROMETHEUS&lt;/code> if you have existing prometheus server.&lt;/p>
 &lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-bash" data-lang="bash">&lt;span style="display:flex;">&lt;span>export CUSTOMIZE_PROMETHEUS&lt;span style="color:#f92672">=&lt;/span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">if&lt;/span> &lt;span style="color:#f92672">[&lt;/span> $CUSTOMIZE_PROMETHEUS &lt;span style="color:#f92672">]&lt;/span>; &lt;span style="color:#66d9ef">then&lt;/span> sed -i &lt;span style="color:#e6db74">&amp;#39;&amp;#39;&lt;/span> &lt;span style="color:#e6db74">&amp;#34;s/http:\/\/prometheus-server.crane-system.svc.cluster.local:8080/&lt;/span>&lt;span style="color:#e6db74">${&lt;/span>CUSTOMIZE_PROMETHEUS&lt;span style="color:#e6db74">}&lt;/span>&lt;span style="color:#e6db74">/&amp;#34;&lt;/span> deploy/craned/deployment.yaml ; &lt;span style="color:#66d9ef">fi&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">if&lt;/span> &lt;span style="color:#f92672">[&lt;/span> $CUSTOMIZE_PROMETHEUS &lt;span style="color:#f92672">]&lt;/span>; &lt;span style="color:#66d9ef">then&lt;/span> sed -i &lt;span style="color:#e6db74">&amp;#39;&amp;#39;&lt;/span> &lt;span style="color:#e6db74">&amp;#34;s/PROMETHEUS_ADDRESS/&lt;/span>&lt;span style="color:#e6db74">${&lt;/span>CUSTOMIZE_PROMETHEUS&lt;span style="color:#e6db74">}&lt;/span>&lt;span style="color:#e6db74">/&amp;#34;&lt;/span> deploy/craned/deployment.yaml ; &lt;span style="color:#66d9ef">fi&lt;/span>
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="access-dashboard">Access Dashboard&lt;/h2>
 &lt;p>You can use the dashboard to view and manage crane manifests.&lt;/p>
 &lt;p>&lt;img src="/images/dashboard.png" alt="">&lt;/p>
